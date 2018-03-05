@@ -27,10 +27,17 @@ func! OnLoadTestErrorsDone(job, status)
 endfunc
 
 func! s:LoadErrors()
-	setlocal errorformat=%E\ %#[error]\ %#%f:%l:\ %m,%-Z\ %#[error]\ %p^,%-C\ %#[error]\ %m,%C\ %m
+	" SBT 1
+	setlocal errorformat=%E\ %#[error]\ %#%f:%l:%c:\ %m,%-Z\ %#[error]\ %p^,%-C\ %#[error]\ %m,%C\ %m
+	setlocal errorformat+=%W\ %#[warn]\ %#%f:%l:%c:\ %m,%-Z\ %#[warn]\ %p^,%-C\ %#[warn]\ %m,%C\ %m
+
+	" SBT 0
+	setlocal errorformat+=%E\ %#[error]\ %#%f:%l:\ %m,%-Z\ %#[error]\ %p^,%-C\ %#[error]\ %m,%C\ %m
 	setlocal errorformat+=%W\ %#[warn]\ %#%f:%l:\ %m,%-Z\ %#[warn]\ %p^,%-C\ %#[warn]\ %m,%C\ %m
+
 	setlocal errorformat+=%-G%.%#
 	cg ./target/errors.err
+	cw
 endfunc
 
 func! LoadSbtErrors()
@@ -69,3 +76,4 @@ endfunc
 		
 command! Sbtstart call s:SbtStart()
 command! Sbtstop call s:SbtStop()
+command! Sbtcg call LoadSbtErrors()
